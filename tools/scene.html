@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><title>scene dev</title>
+<style>html,body{margin:0;height:100%;background:#101210;color:#ddd;font:12px monospace}#st{position:fixed;inset:0}canvas{width:100%;height:100%;display:block}</style>
+<script type="importmap">{"imports":{"three":"../vendor/three/three.module.js","three/addons/":"../vendor/three/addons/"}}</script>
+<div id="st"><canvas id="c"></canvas></div>
+<script type="module">
+import * as THREE from 'three';
+import {createEngine} from '../js/scene/engine.js';
+const q=new URLSearchParams(location.search);
+window.THREE=THREE;
+window.E=await createEngine({canvas:c,tierName:q.get('tier')||'high'});
+// probe: raycast from a given camera pose through ndc
+window.probe=(pos,look,fov,nx,ny)=>{const cam=new THREE.PerspectiveCamera(fov,innerWidth/innerHeight,.01,60);cam.position.set(...pos);cam.lookAt(...look);cam.updateMatrixWorld(true);cam.updateProjectionMatrix();const r=new THREE.Raycaster();r.setFromCamera(new THREE.Vector2(nx,ny),cam);const h=r.intersectObjects(E.scene.children,true).filter(i=>i.object.visible);return h.slice(0,3).map(i=>i.object.name.replace('Modern_Bathroom_','')+' '+i.point.toArray().map(v=>+v.toFixed(2)))};
+window.save=async(name,blob)=>{await fetch('/__save?path='+name,{method:'POST',body:blob});return blob.size};
+document.title='ready';
+</script>

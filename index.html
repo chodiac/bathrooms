@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="sr-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KAMEN & VODA — Kupatila</title>
+<meta name="description" content="Prodavnica kupatilskih elemenata sa interaktivnim 3D kupatilom: slavine, tuš kabine, kade, lavaboi, nameštaj, ogledala i galanterija.">
+<meta name="theme-color" content="#101210">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<link rel="preload" as="image" href="assets/posters/l-0.jpg" media="(min-aspect-ratio: 1/1)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/posters/p-0.jpg" media="(max-aspect-ratio: 1/1)" fetchpriority="high">
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.js","three/addons/":"./vendor/three/addons/"}}</script>
+<script>(function(){var q=location.search,r=/[?&]motion=reduce/.test(q)||(matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=full/.test(q));document.documentElement.className='js'+(r?' reduce':'')})()</script>
+</head>
+<body>
+<a class="skip" href="#sadrzaj">Preskoči na sadržaj</a>
+
+<header class="hdr" id="hdr">
+  <div class="hdr__in">
+    <button class="hdr__menu" id="menuBtn" aria-expanded="false" aria-controls="drawer" aria-label="Meni"><i></i><i></i></button>
+    <a class="logo" href="#/" aria-label="KAMEN & VODA — početna"><span class="logo__a">KAMEN <em>&amp;</em> VODA</span><span class="logo__b">Kupatila</span></a>
+    <nav class="hdr__nav" id="hdrNav" aria-label="Kategorije"></nav>
+    <div class="hdr__act">
+      <button class="hdr__btn hdr__explore" id="hdrExplore" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9L12 3Zm0 0v18M4 7.5l8 4.5 8-4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span>Istraži prostor</span></button>
+      <button class="hdr__btn" id="searchBtn" type="button" aria-label="Pretraga"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      <a class="hdr__btn hdr__cart" id="cartLink" href="#/korpa" aria-label="Korpa"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Zm4 0V7a3 3 0 0 1 6 0v1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><b id="cartCount" aria-live="polite">0</b></a>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__bg" data-close></div>
+  <div class="drawer__p" role="dialog" aria-label="Navigacija">
+    <button class="drawer__x" type="button" data-close aria-label="Zatvori meni">✕</button>
+    <form class="drawer__search" id="drawerSearch" role="search"><input type="search" name="q" placeholder="Pretraga proizvoda" aria-label="Pretraga proizvoda" autocomplete="off"><button type="submit" aria-label="Traži">→</button></form>
+    <p class="lab">Kategorije</p>
+    <nav class="drawer__nav" id="drawerNav" aria-label="Kategorije"></nav>
+    <p class="lab">Informacije</p>
+    <nav class="drawer__sub" aria-label="Informacije">
+      <a href="#/kolekcija">Cela kolekcija</a>
+      <a href="#/info/dostava">Dostava i povraćaj</a>
+      <a href="#/info/kontakt">Kontakt</a>
+      <button type="button" id="drawerExplore">Istraži 3D kupatilo</button>
+    </nav>
+  </div>
+</div>
+
+<div class="search" id="search" aria-hidden="true">
+  <div class="search__bg" data-close></div>
+  <div class="search__p" role="dialog" aria-label="Pretraga">
+    <form id="searchForm" role="search"><input id="searchInput" type="search" name="q" placeholder="Pretražite proizvode i kategorije" aria-label="Pretraga" autocomplete="off"><button type="button" class="search__x" data-close aria-label="Zatvori">Esc</button></form>
+    <div class="search__res" id="searchRes"></div>
+  </div>
+</div>
+
+<main id="sadrzaj">
+  <!-- ============ POČETNA ============ -->
+  <div class="view" id="viewHome" data-view="home">
+    <section class="hero" id="pocetak" aria-label="Interaktivno 3D kupatilo">
+      <div class="hero__pin" id="pin">
+        <div class="hero__stage" id="stage">
+          <div class="posters" id="posters" role="img" aria-label="Prikaz modernog kupatila sa slobodnostojećom kadom, lavaboom u kamenu i tuš kabinom">
+            <img class="poster" data-i="0" src="assets/posters/l-0.jpg" alt="" width="1600" height="900" fetchpriority="high" decoding="async">
+          </div>
+          <canvas class="hero__canvas" id="canvas" aria-hidden="true"></canvas>
+          <div class="hero__scrim" aria-hidden="true"></div>
+          <div class="hs-layer" id="hsLayer"></div>
+          <div class="xo" id="xo" aria-hidden="true"></div>
+        </div>
+
+        <div class="intro" id="intro">
+          <p class="lab">3D kupatilo · interaktivni prikaz</p>
+          <h1 class="intro__h">Kupatilo koje<br><em>možete da obiđete.</em></h1>
+          <p class="intro__p">Uđite u prostor, pogledajte slavine, kade, lavaboe i tuševe na svom mestu, pa ih odmah pronađite u prodavnici.</p>
+          <div class="intro__btns">
+            <button class="btn btn--light" type="button" id="btnExplore"><span>Istraži kupatilo</span></button>
+            <a class="btn btn--line-l" href="#/kolekcija"><span>Pogledaj kolekciju</span></a>
+          </div>
+        </div>
+
+        <div class="cue" id="cue" aria-hidden="true"><span class="cue__line"></span><span>Skrolujte da uđete</span></div>
+        <a class="skipintro" id="skipIntro" href="#kategorije" data-to="kategorije">Preskoči uvod ↓</a>
+        <div class="status" id="status" role="status" hidden></div>
+
+        <div class="endbar" id="endbar">
+          <button class="btn btn--light" type="button" id="btnExplore2"><span>Istraži prostor</span></button>
+          <p class="endbar__t">Dodirnite broj na predmetu da vidite proizvode.</p>
+          <a class="btn btn--line-l" href="#/kolekcija"><span>Pogledaj kolekciju</span></a>
+        </div>
+
+        <!-- poster režim / fallback: kategorije kao brzi linkovi -->
+        <nav class="fallback" id="fallback" aria-label="Kategorije iz prikaza kupatila" hidden></nav>
+
+        <div class="xui" id="xui" hidden>
+          <div class="xui__top">
+            <button class="xbtn" type="button" id="xReset"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Početni pogled</span></button>
+            <a class="xbtn" href="#/kolekcija"><span>Kolekcija</span></a>
+            <button class="xbtn xbtn--exit" type="button" id="xExit"><span>Izađi</span><b aria-hidden="true">✕</b></button>
+          </div>
+          <div class="xui__views" id="xViews" role="group" aria-label="Pogledi u kupatilu"></div>
+          <p class="xui__hint" id="xHint">Prevucite da razgledate · točkić ili štipanje za približavanje</p>
+        </div>
+      </div>
+    </section>
+
+    <div id="homeBody"></div>
+  </div>
+
+  <!-- ============ OSTALE STRANE ============ -->
+  <div class="view" id="viewPage" data-view="page" hidden></div>
+</main>
+
+<footer class="ftr" id="footer"></footer>
+
+<aside class="sheet" id="hsPanel" role="dialog" aria-modal="false" aria-labelledby="hsTitle" hidden></aside>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script type="module" src="js/main.js"></script>
+<noscript><p style="padding:2rem;font:16px sans-serif">Za prikaz prodavnice potreban je JavaScript. Kategorije: Slavine, Tuš kabine, Kade, Lavaboi, Nameštaj, Ogledala, Galanterija, WC šolje.</p></noscript>
+</body>
+</html>
